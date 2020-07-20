@@ -37,16 +37,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginBottom="90dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="90dp"
+        tools:text="25°C"
+        android:textSize="70sp"
         app:layout_constraintBottom_toBottomOf="@+id/weather_iv"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/weather_iv"
-        app:layout_constraintVertical_bias="1.0"
-        android:textSize="70sp"
-        android:text="25°C"/>
+        app:layout_constraintVertical_bias="1.0" />
 
 
     <TextView
@@ -54,10 +54,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Min: 20.4°C "
+        tools:text="Min: 20.4°C "
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_humidity"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,10 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Влажность: 5 mm"
+        tools:text="Влажность: 5 mm"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_wind_speed"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,10 +84,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="100dp"
-        android:layout_marginTop="8dp"
-        android:text="Скорость ветра: 20 km"
+        tools:text="Скорость ветра: 20 km"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,32 +101,33 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Max: 20.4°C"
+        tools:text="Max: 20.4°C"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_min_temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="AutoCompleteTextView"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteY="48dp" />
+
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="100dp">
+
+        </fragment>
+
 
     <TextView
         android:id="@+id/textView_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Небольшой дождь"
-        android:textSize="20sp"
+        tools:text="Небольшой дождь"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/text_view_temperature"
         app:layout_constraintStart_toStartOf="@+id/text_view_temperature"
         app:layout_constraintTop_toBottomOf="@+id/text_view_temperature" />
