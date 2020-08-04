@@ -20,42 +20,4 @@ interface OpenWeatherApiService {
         @Query("units") units: String = "metric",
         @Query("appid") appid: String = API_KEY
     ): Call<CurrentWeatherResponse>
-
-//    companion object {
-//        operator fun invoke(): OpenWeatherApiService {
-//            val requestInterceptor = Interceptor {chain ->
-//
-//                val url = chain.request()
-//                    .url()
-//                    .newBuilder()
-//                    .addQueryParameter("appid",
-//                        API_KEY
-//                    )
-//                    .build()
-//
-//                val request = chain.request()
-//                    .newBuilder()
-//                    .url(url)
-//                    .build()
-//
-//                return@Interceptor chain.proceed(request)
-//
-//            }
-//
-//            val okHttpClient = OkHttpClient.Builder()
-//                .addInterceptor(requestInterceptor)
-//                //.addInterceptor(connectivityInterceptor)
-//                .build()
-//
-//            return Retrofit.Builder()
-//                .client(okHttpClient)
-//                .baseUrl("http://api.openweathermap.org/data/2.5/")
-//                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-//                    //converts json string to kotlin class
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build()
-//                .create(OpenWeatherApiService::class.java)
-//        }
-//
-//    }
 }

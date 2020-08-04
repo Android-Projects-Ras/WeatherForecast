@@ -132,5 +132,14 @@
         app:layout_constraintStart_toStartOf="@+id/text_view_temperature"
         app:layout_constraintTop_toBottomOf="@+id/text_view_temperature" />
 
+    <TextView
+        android:id="@+id/textView_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
