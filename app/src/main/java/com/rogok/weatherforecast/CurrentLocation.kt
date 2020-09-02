@@ -14,15 +14,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-class CurrentLocation(textView_location: TextView) {
+class CurrentLocation : LocationListener {
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var lm: LocationManager
-    lateinit var loc: Location
 
-
-    fun checkPermission() : Location {
+    private fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(
                 APP_ACTIVITY,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -38,35 +38,32 @@ class CurrentLocation(textView_location: TextView) {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ), 111
             )
-        lm = APP_ACTIVITY.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-        var locList = object : LocationListener{
-            override fun onLocationChanged(p0: Location?) {
-                val address = reverseGeocode(p0)
-            }
-
-            override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-            }
-
-            override fun onProviderEnabled(p0: String?) {
-            }
-
-            override fun onProviderDisabled(p0: String?) {
-            }
-
-        }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100.0f, locList)
-        return loc
     }
 
+    fun getLocation() : Task<Location?> {
+        checkPermission()
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(APP_ACTIVITY)
+        val location = fusedLocationProviderClient.lastLocation
+        return location
+    }
 
-    fun reverseGeocode(loc: Location?) {
-        var geocoder = Geocoder(APP_ACTIVITY, Locale.getDefault())
-        var addresses = geocoder.getFromLocation(loc!!.latitude, loc.longitude, 5)
+    fun reverseGeocode(loc: Location?): String {
+        val geocoder = Geocoder(APP_ACTIVITY, Locale.getDefault())
+        val addresses = geocoder.getFromLocation(loc!!.latitude, loc.longitude, 1)
         val address = addresses[0].locality   //return city name
-        APP_ACTIVITY.textView_location.text = addresses[0].locality
-            //"${address.locality}"
+        return address
+    }
 
+    override fun onLocationChanged(p0: Location?) {
+        reverseGeocode(p0)
+    }
+
+    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+    }
+
+    override fun onProviderEnabled(p0: String?) {
+    }
+
+    override fun onProviderDisabled(p0: String?) {
     }
 }

@@ -2,7 +2,10 @@ package com.rogok.weatherforecast.util
 
 import android.location.Geocoder
 import android.location.Location
+import android.opengl.Visibility
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
@@ -25,6 +28,7 @@ fun setAutocompleteSupportFragment(apiService: OpenWeatherApiService) {
     }
     placesClient = Places.createClient(APP_ACTIVITY)
     // Initialize the AutocompleteSupportFragment.
+
     val autocompleteFragment =
         APP_ACTIVITY.supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
                 as AutocompleteSupportFragment
@@ -38,7 +42,6 @@ fun setAutocompleteSupportFragment(apiService: OpenWeatherApiService) {
 
             updateLocationToolbar("${place.name}")
 
-
             apiService.getCurrentWeather("${place.name}", "ru")
                 .enqueue(object : Callback<CurrentWeatherResponse> {
                     override fun onFailure(call: Call<CurrentWeatherResponse>, t: Throwable) {
@@ -49,28 +52,42 @@ fun setAutocompleteSupportFragment(apiService: OpenWeatherApiService) {
                         call: Call<CurrentWeatherResponse>,
                         response: Response<CurrentWeatherResponse>
                     ) {
-                        getIcon(response.body()!!.weather[0].id.toString())
-                        Glide.with(APP_ACTIVITY)
-                            .load(urlForGlide)
-                            .into(APP_ACTIVITY.weather_iv)
-                        getCurrentWeather(response)
+                        if (response.body() != null) {
+                            getIcon(response.body()!!.weather[0].id.toString())
+                            Glide.with(APP_ACTIVITY)
+                                .load(urlForGlide)
+                                .into(APP_ACTIVITY.weather_iv)
+                            getCurrentWeather(response)
 
-                        Log.d("Andrew", "onResponse: ${response.body()}")
+                            Log.d("Andrew", "onResponse: ${response.body()}")
+                        } else {
+                            Toast.makeText(APP_ACTIVITY, APP_ACTIVITY.getString(R.string.no_such_place), Toast.LENGTH_SHORT)
+                                .show()
+                            autocompleteFragment.setText("")
+                            updateLocationToolbar("")
+                            APP_ACTIVITY.weather_iv.visibility = View.GONE
+                            APP_ACTIVITY.textView_description.text = ""
+                            APP_ACTIVITY.text_view_temperature.text = ""
+                            APP_ACTIVITY.textView_max_temperature.text = ""
+                            APP_ACTIVITY.textView_min_temperature.text = ""
+                            APP_ACTIVITY.textView_humidity.text = ""
+                            APP_ACTIVITY.textView_wind_speed.text = ""
+                        }
                     }
-
                 })
 
             // Get info about the selected place.
             Log.i("onPlaceSelected", "Place: ${place.name}, ${place.id}")
         }
+
         override fun onError(p0: Status) {
             Log.i("onError", "An error occurred: $p0")
         }
     })
 }
 
-fun getCurrentWeather(response: Response<CurrentWeatherResponse>) {
-    val description = response.body()!!.weather[0].description
+fun getCurrentWeather(response: Response<CurrentWeatherResponse>?) {
+    val description = response?.body()!!.weather[0].description
     val temperature = (response.body()!!.main.temp).roundToInt()
     val maxTemperature = response.body()!!.main.tempMax
     val minTemperature = response.body()!!.main.tempMin
@@ -111,10 +128,10 @@ fun updateLocationToolbar(location: String) {
     APP_ACTIVITY.supportActionBar?.title = location
 }
 
-fun getCityName(loc: Location?) : String {
-    var geocoder = Geocoder(APP_ACTIVITY, Locale.getDefault())
-    var addresses = geocoder.getFromLocation(loc!!.latitude, loc.longitude, 5)
+fun getCityName(loc: Location?): String {
+    val geocoder = Geocoder(APP_ACTIVITY, Locale.getDefault())
+    val addresses = geocoder.getFromLocation(loc!!.latitude, loc.longitude, 1)
     val address = addresses[0].locality   //return city name
-    APP_ACTIVITY.textView_location.text = addresses[0].locality
     return address
 }
+

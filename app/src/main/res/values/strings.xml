@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WeatherForecast</string>
+    <string name="no_such_place">Такого места нет</string>
+    <string name="location_not_found">Местоположение не найдено</string>
 </resources>

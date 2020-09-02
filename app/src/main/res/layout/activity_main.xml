@@ -4,7 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_sky"
     tools:context=".MainActivity">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </fragment>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -18,10 +45,10 @@
         android:id="@+id/weather_iv"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="@dimen/margin_primary"
+        android:layout_marginTop="@dimen/margin_primary"
+        android:layout_marginEnd="@dimen/margin_primary"
+        android:layout_marginBottom="@dimen/margin_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,16 +64,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/margin_primary"
         android:layout_marginBottom="90dp"
-        tools:text="25°C"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="70sp"
         app:layout_constraintBottom_toBottomOf="@+id/weather_iv"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/weather_iv"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:text="25°C" />
 
 
     <TextView
@@ -54,92 +82,83 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        tools:text="Min: 20.4°C "
+        android:layout_marginTop="@dimen/margin_primary"
+        android:layout_marginEnd="@dimen/margin_primary"
+        android:layout_marginBottom="@dimen/margin_primary"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_humidity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.038"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Min: 20.4°C " />
 
     <TextView
         android:id="@+id/textView_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        tools:text="Влажность: 5 mm"
+        android:layout_marginStart="@dimen/margin_primary"
+        android:layout_marginTop="@dimen/margin_primary"
+        android:layout_marginEnd="@dimen/margin_primary"
+        android:layout_marginBottom="@dimen/margin_primary"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_wind_speed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.069"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Влажность: 5 mm" />
 
     <TextView
         android:id="@+id/textView_wind_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/margin_primary"
+        android:layout_marginTop="@dimen/margin_primary"
+        android:layout_marginEnd="@dimen/margin_primary"
         android:layout_marginBottom="100dp"
-        tools:text="Скорость ветра: 20 km"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.101"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Скорость ветра: 20 km" />
 
     <TextView
         android:id="@+id/textView_max_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        tools:text="Max: 20.4°C"
+        android:layout_marginStart="@dimen/margin_primary"
+        android:layout_marginEnd="@dimen/margin_primary"
+        android:layout_marginBottom="@dimen/margin_primary"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_min_temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-        <fragment
-            android:id="@+id/autocomplete_fragment"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="100dp">
-
-        </fragment>
-
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Max: 20.4°C" />
 
     <TextView
         android:id="@+id/textView_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Небольшой дождь"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/text_view_temperature"
         app:layout_constraintStart_toStartOf="@+id/text_view_temperature"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_temperature" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_temperature"
+        tools:text="Небольшой дождь" />
 
     <TextView
-        android:id="@+id/textView_location"
+        android:id="@+id/tv_show_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/refresh_layout"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
