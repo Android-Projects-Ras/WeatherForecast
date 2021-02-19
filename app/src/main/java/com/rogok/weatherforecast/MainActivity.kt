@@ -27,10 +27,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         APP_ACTIVITY = this
         APP_CONTEXT = APP_ACTIVITY.applicationContext
         val apiService = retrofit.create(OpenWeatherApiService::class.java)
         setAutocompleteSupportFragment(apiService)
+        getCurrentLocationWeather()
 
         refresh_layout.setOnRefreshListener {
             getCurrentLocationWeather()
@@ -45,26 +47,29 @@ class MainActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
         //Getting the weather of current location
         getCurrentLocationWeather()
 
-    }
+    }*/
 
     private fun getCurrentLocationWeather() {
         val currentLocation = CurrentLocation()
         val location = currentLocation.getLocation()
         location.addOnSuccessListener {
 
-                val cityName = getCityName(it)
-                //val cityName = currentLocation.getLocation()
-                val autocompleteFragment =
-                    APP_ACTIVITY.supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
-                            as AutocompleteSupportFragment
-                autocompleteFragment.setText(cityName)
+            val cityName = getCityName(it)
+            //val cityName = currentLocation.getLocation()
+            val autocompleteFragment =
+                APP_ACTIVITY.supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+                        as AutocompleteSupportFragment
+            autocompleteFragment.setText(cityName)
+            if (cityName != null) {
                 updateLocationToolbar(cityName)
+
                 val apiService = retrofit.create(OpenWeatherApiService::class.java)
+
                 apiService.getCurrentWeather(cityName, "ru")
                     .enqueue(object : Callback<CurrentWeatherResponse> {
                         override fun onFailure(call: Call<CurrentWeatherResponse>, t: Throwable) {
@@ -75,7 +80,8 @@ class MainActivity : AppCompatActivity() {
                             call: Call<CurrentWeatherResponse>,
                             response: Response<CurrentWeatherResponse>
                         ) {
-                            getIcon(response.body()!!.weather[0].id.toString())
+                            getIcon(response.body()!!.weather[0].icon)
+                            setWeatherBackground(response.body()!!.weather[0].icon)
                             Glide.with(APP_ACTIVITY)
                                 .load(urlForGlide)
                                 .into(APP_ACTIVITY.weather_iv)
@@ -85,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                     })
+            }
 
         }.addOnFailureListener {
             Toast.makeText(this, getString(R.string.location_not_found), Toast.LENGTH_SHORT).show()

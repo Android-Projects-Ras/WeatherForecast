@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_sky"
+    android:id="@+id/constraint_layout"
     tools:context=".MainActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -32,6 +33,36 @@
 
     </fragment>
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="progressBar_loading, textView_loading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBar_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Loading..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressBar_loading" />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -40,40 +71,39 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/content_start"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_begin="16dp"
+        android:orientation="vertical"/>
 
     <ImageView
         android:id="@+id/weather_iv"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginStart="@dimen/margin_primary"
-        android:layout_marginTop="@dimen/margin_primary"
         android:layout_marginEnd="@dimen/margin_primary"
-        android:layout_marginBottom="@dimen/margin_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.528"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.334"
         app:layout_constraintWidth_percent="0.25"
-        tools:src="@drawable/rain" />
+        tools:src="@drawable/layout_icon"
+        />
 
     <TextView
         android:id="@+id/text_view_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="@dimen/margin_primary"
-        android:layout_marginBottom="90dp"
+        android:layout_marginStart="16sp"
         android:textColor="@color/colorTextPrimary"
         android:textSize="70sp"
-        app:layout_constraintBottom_toBottomOf="@+id/weather_iv"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/weather_iv"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.37"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/content_start"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="25°C" />
 
 
@@ -81,63 +111,48 @@
         android:id="@+id/textView_min_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="@dimen/margin_primary"
         android:layout_marginEnd="@dimen/margin_primary"
         android:layout_marginBottom="@dimen/margin_primary"
         android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_humidity"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.038"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/content_start"
         tools:text="Min: 20.4°C " />
 
     <TextView
         android:id="@+id/textView_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_primary"
-        android:layout_marginTop="@dimen/margin_primary"
         android:layout_marginEnd="@dimen/margin_primary"
         android:layout_marginBottom="@dimen/margin_primary"
         android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_wind_speed"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.069"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/content_start"
         tools:text="Влажность: 5 mm" />
 
     <TextView
         android:id="@+id/textView_wind_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_primary"
-        android:layout_marginTop="@dimen/margin_primary"
-        android:layout_marginEnd="@dimen/margin_primary"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="80dp"
         android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.101"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/content_start"
         tools:text="Скорость ветра: 20 km" />
 
     <TextView
         android:id="@+id/textView_max_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_primary"
         android:layout_marginEnd="@dimen/margin_primary"
         android:layout_marginBottom="@dimen/margin_primary"
         android:textColor="@color/colorTextPrimary"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@id/textView_min_temperature"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/content_start"
         tools:text="Max: 20.4°C" />
 
     <TextView
@@ -146,9 +161,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorTextPrimary"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_temperature"
-        app:layout_constraintStart_toStartOf="@+id/text_view_temperature"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_temperature"
+        app:layout_constraintStart_toStartOf="@id/text_view_temperature"
+        app:layout_constraintTop_toBottomOf="@id/text_view_temperature"
         tools:text="Небольшой дождь" />
 
     <TextView
@@ -156,7 +170,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/refresh_layout"
+        app:layout_constraintEnd_toStartOf="@id/refresh_layout"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
