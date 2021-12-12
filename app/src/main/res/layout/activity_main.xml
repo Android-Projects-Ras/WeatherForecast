@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_sky"
-    android:id="@+id/constraint_layout"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
@@ -17,9 +17,7 @@
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
     <fragment
         android:id="@+id/autocomplete_fragment"
@@ -33,20 +31,31 @@
 
     </fragment>
 
+    <TextView
+        android:id="@+id/tvNoInternet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
+        tools:text="No Internet Connection" />
+
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         app:constraint_referenced_ids="progressBar_loading, textView_loading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <ProgressBar
         android:id="@+id/progressBar_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +72,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progressBar_loading" />
 
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -75,8 +83,18 @@
         android:id="@+id/content_start"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintGuide_begin="16dp"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="weather_iv, text_view_temperature, textView_min_temperature,
+         textView_humidity, textView_wind_speed, textView_max_temperature, textView_description, weather_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/weather_iv"
@@ -88,10 +106,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.334"
+        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintWidth_percent="0.25"
-        tools:src="@drawable/layout_icon"
-        />
+        tools:src="@drawable/layout_icon" />
 
     <TextView
         android:id="@+id/text_view_temperature"
@@ -100,12 +117,11 @@
         android:layout_marginStart="16sp"
         android:textColor="@color/colorTextPrimary"
         android:textSize="70sp"
-        app:layout_constraintVertical_bias="0.37"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/content_start"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.37"
         tools:text="25°C" />
-
 
     <TextView
         android:id="@+id/textView_min_temperature"
@@ -164,15 +180,5 @@
         app:layout_constraintStart_toStartOf="@id/text_view_temperature"
         app:layout_constraintTop_toBottomOf="@id/text_view_temperature"
         tools:text="Небольшой дождь" />
-
-    <TextView
-        android:id="@+id/tv_show_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@id/refresh_layout"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
