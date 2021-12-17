@@ -1,18 +1,18 @@
 package com.rogok.weatherforecast.data.repository
 
-import android.util.Log
 import com.rogok.weatherforecast.data.CurrentWeatherResponse
 import com.rogok.weatherforecast.data.network.OpenWeatherApiService
 import com.rogok.weatherforecast.data.room.CurrentWeatherDao
 import com.rogok.weatherforecast.location.LocationManager
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 interface WeatherRepository {
     //fun saveDataToDB(cityName: String)
     //suspend fun getDataFromDB(): Flow<CurrentWeather>
     //suspend fun getCurrentLocationWeather()
     //suspend fun eraseDataFromDB()
-    suspend fun getWeatherFromAPI(): Flow<CurrentWeatherResponse>?
+    suspend fun getWeatherFromAPI(): CurrentWeatherResponse
 }
 
 class WeatherRepositoryImpl(
@@ -109,16 +109,13 @@ class WeatherRepositoryImpl(
         currentWeatherDao.deleteAllData()
     }*/
 
-    override suspend fun getWeatherFromAPI(): Flow<CurrentWeatherResponse>? {
-        val openWeatherLocation = locationManager.startLocation {
-        val cityName = locationManager.getCityName(it)
+    override suspend fun getWeatherFromAPI(): CurrentWeatherResponse {
+        /*val openWeatherLocation = locationManager.startLocation {
+            val cityName = locationManager.getCityName(it)
 
-        }
-        val weather = cityName?.let { api.getCurrentWeather(it) }
-        if (cityName != null) {
-            Log.d("WRepo,getWeatherFromAPI", cityName)
-            Log.d("WRepo,getWeatherFromAPI", "$weather")
-        }
-        return weather
+        }*/
+
+        return api.getCurrentWeather()
+
     }
 }

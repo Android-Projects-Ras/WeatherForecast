@@ -1,15 +1,17 @@
 package com.rogok.weatherforecast.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.rogok.weatherforecast.APP_ACTIVITY
 import com.rogok.weatherforecast.databinding.ActivityMainBinding
+import com.rogok.weatherforecast.util.UIState
 import com.rogok.weatherforecast.util.displayWeather
-import com.rogok.weatherforecast.util.loadImageFromCache
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,18 +45,36 @@ class MainActivity : AppCompatActivity() {
         viewModel.makeRequest()
 
         lifecycleScope.launch {
-                viewModel.weatherData.collect {
-                    displayWeather(it)
+
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                viewModel.weatherData.collect { state ->
+                    //viewModel.weatherData.observe(this@MainActivity, Observer { state ->
+                    when (state) {
+                        is UIState.Success -> {
+                            hideProgressBar()
+                            displayWeather(state.data)
+                        }
+                        is UIState.Error -> {
+                            hideProgressBar()
+                            Toast.makeText(
+                                this@MainActivity,
+                                "There is an error: ${state.message}", Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        is UIState.Loading -> {
+                            showProgressBar()
+                        }
+
+                    }
                 }
+            }
         }
 
-       /* viewModel.weatherData.observe(this, Observer {
-            displayWeather(it)
-        })*/
 
-        viewModel.iconData.observe(this, Observer {
+        /*viewModel.iconData.observe(this, Observer {
             loadImageFromCache(it)
-        })
+        })*/
 
         viewModel.errorLiveData.observe(this, Observer {
             binding.tvNoInternet.isVisible = it
@@ -68,6 +88,15 @@ class MainActivity : AppCompatActivity() {
             binding.groupWeather.isVisible = it
         })
 
+
+    }
+
+    private fun hideProgressBar() {
+        binding.groupLoading.isVisible = false
+    }
+
+    private fun showProgressBar() {
+        binding.groupLoading.isVisible = true
 
     }
 

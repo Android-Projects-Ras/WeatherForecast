@@ -5,6 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.core.net.toUri
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.rogok.weatherforecast.APP_ACTIVITY
 import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
@@ -18,7 +21,7 @@ interface CachingStrategy {
     suspend fun saveBitmap(bitmap: Bitmap, name: String): Uri
     suspend fun isImageExists(apiIconName: String): Boolean
 
-    //suspend fun loadImageFromCache(cachedIconName: String)
+    fun loadImageFromCache(cachedIconName: Uri)
     fun getIconName(iconCode: String): String
 }
 
@@ -67,6 +70,13 @@ class CachingStrategyImpl(
             }).start()
         }
 
+    }
+
+    override fun loadImageFromCache(cachedIconName: Uri) {   //TODO:place for this fun -
+        Glide.with(APP_ACTIVITY)
+            .load(cachedIconName)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .into(APP_ACTIVITY.binding.weatherIv)
     }
 
     override suspend fun saveBitmap(bitmap: Bitmap, name: String): Uri {

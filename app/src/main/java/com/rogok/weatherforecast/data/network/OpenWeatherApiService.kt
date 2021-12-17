@@ -17,9 +17,9 @@ interface OpenWeatherApiService {
 
     @GET("weather")
     suspend fun getCurrentWeather(
-        @Query("q") location: String,
+        @Query("q") location: String = "Zaporizhia",
         @Query("lang") languageCode: String = "en",
         @Query("units") units: String = "metric",
         @Query("appid") appid: String = API_KEY
-    ): Flow<CurrentWeatherResponse>
+    ): CurrentWeatherResponse
 }

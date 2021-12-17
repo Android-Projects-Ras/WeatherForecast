@@ -65,28 +65,21 @@ suspend fun setAutocompleteSupportFragment(
 fun displayWeather(response: CurrentWeather?) {
     if (response != null) {
         val description = response.weather[0].description
-        val temperature = (response.main.temp).roundToInt()
-        val maxTemperature = response.main.tempMax
-        val minTemperature = response.main.tempMin
+        val temperature = (response.main.temp).roundToInt().toString() + "°C"
+        val maxTemperature = response.main.tempMax.toString() + "°C"
+        val minTemperature = response.main.tempMin.toString() + "°C"
         val humidity = response.main.humidity.toString()
         val windSpeed = (response.wind.speed).roundToInt()
         val cityName = response.name
 
         APP_ACTIVITY.binding.textViewDescription.text = description
-        APP_ACTIVITY.binding.textViewTemperature.text = temperature.toString()
-        APP_ACTIVITY.binding.textViewMaxTemperature.text = maxTemperature.toString()
-        APP_ACTIVITY.binding.textViewMinTemperature.text = minTemperature.toString()
+        APP_ACTIVITY.binding.textViewTemperature.text = temperature
+        APP_ACTIVITY.binding.textViewMaxTemperature.text = maxTemperature
+        APP_ACTIVITY.binding.textViewMinTemperature.text = minTemperature
         APP_ACTIVITY.binding.textViewHumidity.text = humidity
         APP_ACTIVITY.binding.textViewWindSpeed.text = windSpeed.toString()
         APP_ACTIVITY.supportActionBar?.title = cityName
     }
-}
-
-fun loadImageFromCache(cachedIconName: Uri) {   //TODO:place for this fun
-    Glide.with(APP_ACTIVITY)
-        .load(cachedIconName)
-        .diskCacheStrategy(DiskCacheStrategy.NONE)
-        .into(APP_ACTIVITY.binding.weatherIv)
 }
 
 fun setWeatherBackground(icon: String) {

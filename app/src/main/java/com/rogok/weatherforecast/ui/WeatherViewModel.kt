@@ -7,20 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rogok.weatherforecast.data.CurrentWeatherResponse
-import com.rogok.weatherforecast.data.Main
-import com.rogok.weatherforecast.data.Sys
-import com.rogok.weatherforecast.data.Wind
 import com.rogok.weatherforecast.data.cache.CachingStrategy
 import com.rogok.weatherforecast.data.repository.WeatherRepository
 import com.rogok.weatherforecast.mappers.toCurrentWeather
 import com.rogok.weatherforecast.models.CurrentWeather
-import com.rogok.weatherforecast.util.loadImageFromCache
-import kotlinx.coroutines.CoroutineScope
+import com.rogok.weatherforecast.util.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.lang.NullPointerException
+import java.lang.Exception
 
 const val THIRTY_MINUTES_IN_MILL = 1000 * 60 * 30
 const val TEN_SECONDS_IN_MILL = 1000 * 10
@@ -30,23 +25,10 @@ class WeatherViewModel(
     private val cachingStrategy: CachingStrategy
 ) : ViewModel() {
 
-    /*private var _weatherData = MutableLiveData<CurrentWeather?>()
-    val weatherData: LiveData<CurrentWeather?> = _weatherData*/
-    private var _weatherData = MutableStateFlow<CurrentWeather>(CurrentWeather(
-        id = 0,
-        main = Main(
-            humidity = 0,
-            temp = 0.0,
-            tempMax = 0.0,
-            tempMin = 0.0
-        ),
-        sys = Sys(""),
-        name = "",
-        weather = emptyList(),
-        wind = Wind(speed = 0.0),
-        requestTime = 0
-    ))
-    val weatherData: StateFlow<CurrentWeather> = _weatherData
+   /* private var _weatherData = MutableLiveData<UIState<CurrentWeather>>()
+    val weatherData: LiveData<UIState<CurrentWeather>> = _weatherData*/
+    private var _weatherData = MutableStateFlow<UIState<CurrentWeather>>(UIState.Loading())
+    val weatherData = _weatherData.asStateFlow()
 
     private var _iconData = MutableLiveData<Uri>()
     val iconData: LiveData<Uri> = _iconData
@@ -74,17 +56,37 @@ class WeatherViewModel(
         makeRequestToDB()
     }*/
 
-    fun makeRequest() {
-        /*viewModelScope.launch(Dispatchers.IO) {
-            repository.getWeatherFromAPI()
-                ?.toCurrentWeather()
-                .also { _weatherData.postValue(it) }
-        }*/
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getWeatherFromAPI()?.collect {
-                _weatherData.value = it.toCurrentWeather()
-            }
+     /*val weather: Flow<CurrentWeather> = flow {
+         val weatherFromAPI = repository
+             .getWeatherFromAPI()
+             .toCurrentWeather()
+         emit(weatherFromAPI)
+     }.catch {
 
+     }*/
+
+
+    fun makeRequest() {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _weatherData.value = UIState.Loading()
+            _weatherData.value = handleWeatherResponse()
+
+        }
+    }
+
+    private suspend fun handleWeatherResponse(): UIState<CurrentWeather> {
+        return try {
+            UIState.Success(
+                repository
+                    .getWeatherFromAPI()
+                    .toCurrentWeather()
+            )
+        } catch (e: Exception) {
+            UIState.Error(
+                data = null,
+                message = e.message.toString()
+            )
         }
 
     }
@@ -113,7 +115,7 @@ class WeatherViewModel(
         val iconName = cachingStrategy.getIconName(iconCode) //01d@2x.png
 
         if (cachingStrategy.isImageExists(iconName)) {
-            loadImageFromCache(iconName.toUri())
+            cachingStrategy.loadImageFromCache(iconName.toUri())
         } else {
             val imageBitmap = cachingStrategy.loadBitmapAsync(iconCode)
             val savedIcon = cachingStrategy.saveBitmap(imageBitmap, iconName)
@@ -121,11 +123,11 @@ class WeatherViewModel(
 
         }
         //to Main Activity
-        viewModelScope.launch(Dispatchers.Main) {
+        /*viewModelScope.launch(Dispatchers.Main) {
             currentWeather.let {
                 _weatherData.value = it
             }
-        }
+        }*/
         _isLoadingLiveData.postValue(false)
         _isWeatherVisibleLiveData.postValue(true)
     }
